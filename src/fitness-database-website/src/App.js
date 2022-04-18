@@ -1,26 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from './Login';
+import Register from './Register';
+import ConnectDatabase from './database_scripts/ConnectDatabase';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-           Testing this site to be deployed using git pages
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path='/fitness_database' element={<ConnectDatabase />}/>
+          <Route path='/fitness_database/login' element={<Login/>}/>
+          <Route path='/fitness_database/register' element={<Register/>}/>
+        </Routes>
+      </Router>
     </div>
   );
 }
