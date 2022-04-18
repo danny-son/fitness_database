@@ -5,10 +5,9 @@ USE `fitness_db`;
 
 -- table for user account
 CREATE TABLE user_account
-(user_id VARCHAR(24) NOT NULL PRIMARY KEY,
-email VARCHAR(64) NOT NULL,
+(user_id VARCHAR(64) NOT NULL PRIMARY KEY,
 password VARCHAR(64) NOT NULL,
-registration_date DATETIME NOT NULL,
+reg_date DATE NOT NULL,
 login_streak INT NOT NULL);
 
 -- table for acheievements and subclasses representing the types of achievements
