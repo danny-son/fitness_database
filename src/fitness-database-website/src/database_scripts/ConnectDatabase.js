@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 
@@ -12,11 +13,18 @@ export default function ConnectDatabase() {
 
       const handleSubmit = e => {
             e.preventDefault();
-            console.log("Database Connection submitted");
-            console.log("username is: " + values.username);
-            console.log("password is: " + values.password);
-            navigate("../fitness_database/register");
-      }
+            Axios.post("http://localhost:3001/connect-database", {
+              username: values.username,
+              password: values.password
+            }).then((response) => {
+                if (response.status == 404) {
+                   return (<p>Wrong Credentials!</p>);
+                }
+                if (response.status == 200) {
+                  navigate('/fitness_database/login');
+                }
+            });
+      };
 
       const handleChange = e => {
         const {name, value} = e.target

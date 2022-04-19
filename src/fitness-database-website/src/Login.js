@@ -1,15 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
 
   const navigate = useNavigate();
+  const [values, setValues] = useState({
+        username:'',
+        password:'',
+      });
 
   const handleNavigate = e => {
     e.preventDefault();
-    console.log("Navigate from login to register!");
+    console.log("username is " + values.username);
+    console.log("password is " + values.password);
     navigate("../fitness_database/register");
+  };
+
+  const handleChange = e => {
+    const {name, value} = e.target
+        setValues({
+            ...values,
+            [name]: value 
+        });
   };
 
   return (
@@ -23,6 +36,7 @@ function Login() {
                 type={'text'}
                 name='login-username'
                 className='form-input'
+                onChange={handleChange}
                 placeholder='Enter your username'></input>
           </div>
            <div className='form-inputs'>
@@ -31,6 +45,7 @@ function Login() {
                 id='login-password'
                 type={'password'}
                 name='login-password'
+                onChange={handleChange}
                 className='form-input'
                 placeholder='Enter your password'></input>
           </div>
