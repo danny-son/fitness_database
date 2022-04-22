@@ -1,13 +1,10 @@
 use fitness_db;
 
-DROP FUNCTION IF EXISTS userExists;
+DROP PROCEDURE IF EXISTS userExists;
 DELIMITER //
-CREATE FUNCTION userExists(username VARCHAR(64)) RETURNS INT
-NOT DETERMINISTIC READS SQL DATA
+CREATE PROCEDURE userExists(IN username VARCHAR(64))
 BEGIN
- DECLARE query_count INT;
- SELECT count(*) INTO query_count FROM user_account WHERE username = user_id;
- RETURN query_count;
+ SELECT * FROM user_account WHERE username = user_id;
 END//
 
 DROP FUNCTION IF EXISTS loginUser;
@@ -19,9 +16,20 @@ BEGIN
  RETURN query_count;
 END//
 
+DROP PROCEDURE IF EXISTS insertUser;
+CREATE PROCEDURE insertUser(IN username VARCHAR(64), IN pass VARCHAR(64), IN date DATE)
+BEGIN
+ INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES (username, pass, date, 1);
+END//
+
+
+/* Testing our functions / procedures
 DELIMITER ;
 DELETE FROM user_account WHERE user_id = "dannyson900";
 INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("dannyson900", "testing1", "2022-04-18",1);
-SELECT (userExists("dannyson900")) as user_exists;
+CALL userExists("testing");
 SELECT (loginUser("dannyson900", "test-false")) as logged_user;
 SELECT (loginUser("dannyson900","testing1")) as logged_user;
+SELECT * FROM user_account;
+
+*/
