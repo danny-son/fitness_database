@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const navigate = useNavigate();
-  const {handleChange, values, handleSubmit, errors} = useForm(validateInfo);
+  const {handleChange, values, handleSubmit, errors, databaseMSG} = useForm(validateInfo);
 
   const handleNavigate = e => {
       e.preventDefault();
@@ -55,6 +55,7 @@ function Register() {
           <button className='form-register-btn' type='submit'>Sign up</button>
           </form>
            <button className='login-btn' onClick={handleNavigate}>Already have an account? Login here!</button>
+           {databaseMSG && <p>{databaseMSG}</p>}
       </div>
       
   );

@@ -4,9 +4,6 @@ export default function validateInfo(values) {
     //username
     if (!values.username.trim()) {
         errors.username = "Username required";
-    } else {
-        //use our database and see if value exists
-        
     }
 
     if(!values.password) {
@@ -18,7 +15,7 @@ export default function validateInfo(values) {
     //confirm password
     if (!values.password2) {
         errors.password2 = 'Password is required'
-    } else if (values.password2 !== values.password) {
+    } else if (values.password2 != values.password) {
         errors.password2 = 'Passwords do not match';
     }
     

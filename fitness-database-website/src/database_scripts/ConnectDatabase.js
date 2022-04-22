@@ -1,29 +1,30 @@
 import React, {useState} from "react";
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import '../register.css';
 
 
 export default function ConnectDatabase() {
       const navigate = useNavigate();
+      const [errorMessage, setErrorMessage] = useState();
       const [values, setValues] = useState({
         username:'',
-        password:'',
+        password:''
       });
 
 
       const handleSubmit = e => {
-            e.preventDefault();
-            Axios.post("http://localhost:3001/connect-database", {
-              username: values.username,
-              password: values.password
-            }).then((response) => {
-                if (response.status == 404) {
-                   return (<p>Wrong Credentials!</p>);
-                }
-                if (response.status == 200) {
-                  navigate('/fitness_database/login');
-                }
-            });
+          e.preventDefault();
+          Axios.post("http://localhost:3001/connect-database", {
+            username: values.username,
+            password: values.password
+          }).then((response) => {
+              if (response.status == 200) {
+                navigate('/fitness_database/login');
+              }
+          }).catch(() => {
+                setErrorMessage('Could not connect to database, incorrect password or username!');
+          });
       };
 
       const handleChange = e => {
@@ -63,6 +64,7 @@ export default function ConnectDatabase() {
             <button className='form-register-btn' type='submit' onClick={handleSubmit}>Sign up</button>
           </div>
           </form>
+          {errorMessage && <p className="form-inputs">{errorMessage}</p>}
       </div>
       );
 }
