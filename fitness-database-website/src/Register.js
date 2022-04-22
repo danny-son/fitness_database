@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function Register() {
   const navigate = useNavigate();
   const {handleChange, values, handleSubmit, errors, databaseMSG} = useForm(validateInfo);
-
+  
   const handleNavigate = e => {
       e.preventDefault();
       navigate('../fitness_database/login');

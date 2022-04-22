@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import User from './objects';
 
 export default function Login() {
 
@@ -25,6 +25,7 @@ export default function Login() {
     }).then((response) => {
       if (response.status == 200) {
         navigate("/fitness_database/home")
+        User.login(username);
       }
     }).catch(() => {
       setDatabaseMSG("Wrong credentials to login user, please enter correct username and password.");
