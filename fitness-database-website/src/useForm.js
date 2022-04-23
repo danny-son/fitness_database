@@ -18,14 +18,14 @@ const useForm = validateInfo => {
         });
     };
     
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
 
         setErrors(validateInfo(values));
 
         if (!errors.password && !errors.username && !errors.password2) {
             let fullUrl = url + `/check-user-exists`;
-            Axios.get(fullUrl,{
+            await Axios.get(fullUrl,{
                 params: {
                     username: values.username
                 }

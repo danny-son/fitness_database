@@ -15,17 +15,17 @@ export default function Login() {
     navigate("../fitness_database/register");
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    Axios.get(url, {
+    await Axios.get(url, {
       params: {
         username: username,
         password: password
       }
     }).then((response) => {
       if (response.status == 200) {
-        navigate("/fitness_database/home")
         User.login(username);
+        navigate("/fitness_database/home")
       }
     }).catch(() => {
       setDatabaseMSG("Wrong credentials to login user, please enter correct username and password.");
