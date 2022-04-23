@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.6a69f70b.css","mappings":"AAAA,KACE,iBACF,CCFA,eACI,SACJ","sources":["App.css","register.css"],"sourcesContent":[".App {\n  text-align: center;\n}\n",".form-inputs p {\n    color: red;\n}"],"names":[],"sourceRoot":""}
