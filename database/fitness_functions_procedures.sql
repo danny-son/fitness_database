@@ -134,6 +134,103 @@ BEGIN
 END//
 
 
+
+### Programming objects based on workout objects
+# Returns a workout if it exists (from name)
+DELIMITER ;
+DROP PROCEDURE IF EXISTS workOutExists;
+DELIMITER //
+CREATE PROCEDURE workOutExists(IN workoutname VARCHAR(20))
+BEGIN
+
+  SELECT * FROM workout WHERE workoutname = name;
+
+END//
+
+# Finds a workout based on the difficulty
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findWorkOutByDifficulty;
+DELIMITER //
+CREATE PROCEDURE findWorkOutByDifficulty(IN difficulty_p INT)
+BEGIN
+
+	SELECT * FROM workout WHERE difficulty_p = diffIculty;
+    
+END//
+
+# Finds a workout based on what equipment is needed
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findWorkOutByEquipment;
+DELIMITER //
+CREATE PROCEDURE findWorkOutByEquipment(IN equipment_p VARCHAR(999))
+BEGIN
+
+	SELECT * FROM workout WHERE equipment LIKE CONCAT('%', equipment_p, '%');
+    
+END//
+
+# Finds a workout based on what the muscle group that is worked out
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findWorkOutByMuscleGroup;
+DELIMITER //
+CREATE PROCEDURE findWorkOutByMuscleGroup(IN muscle_group_p VARCHAR(999))
+BEGIN
+
+	SELECT * FROM workout WHERE muscle_group LIKE CONCAT('%', muscle_group_p, '%');
+    
+END//
+
+# Finds a workout based on what type of exercise
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findWorkOutByExercise;
+DELIMITER //
+CREATE PROCEDURE findWorkOutByExercise(IN exercise_type_p VARCHAR(999))
+BEGIN
+	SELECT * FROM workout WHERE exercise_type LIKE CONCAT('%', exercise_type_p, '%');
+    
+END//
+
+
+
+# Gets the achievements earned by a specified user
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findUserAchievements;
+DELIMITER //
+CREATE PROCEDURE findUserAchievements(IN user_p VARCHAR(64))
+BEGIN
+    SELECT user_id, achievements.* FROM user_achievements 
+		JOIN achievements ON user_achievements.a_id = achievements.a_id
+		WHERE user_p = user_id;
+END//
+
+
+DELIMITER ;
+DROP PROCEDURE IF EXISTS addMeal;
+DELIMITER //
+CREATE PROCEDURE addMeal(IN d_description VARCHAR(500), IN cals INT, IN carbs INT, IN protein INT, IN fat INT)
+BEGIN
+	 INSERT INTO meal(description, total_calories, carbs_g, protein_g, fat_g) VALUES (d_description, cals, carbs, protein,fat);
+END//
+
+DELIMITER ;
+DROP PROCEDURE IF EXISTS editMeal;
+DELIMITER //
+CREATE PROCEDURE editMeal(IN id INT, IN d_description VARCHAR(500), IN cals INT, IN carbs INT, IN protein INT, IN fat INT)
+BEGIN 
+	UPDATE meal
+    SET description = d_description, total_calories = cals, carbs_g = carbs, protein_g = protein, fat_g = fat
+    WHERE meal_id = id;
+END//
+
+DELIMITER ;
+DROP PROCEDURE IF EXISTS deleteMeal;
+DELIMITER //
+CREATE PROCEDURE deleteMeal(IN id INT)
+BEGIN 
+	DELETE FROM meal WHERE id = meal_id;
+END//
+
+
 /* Testing our functions / procedures
 DELIMITER ;
 DELETE FROM user_account WHERE user_id = "dannyson900";
