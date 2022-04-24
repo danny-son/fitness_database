@@ -28,37 +28,17 @@ END//
 DROP PROCEDURE IF EXISTS workOutExists;
 CREATE PROCEDURE workOutExists(IN workoutname VARCHAR(20))
 BEGIN
+
   SELECT * FROM workout WHERE workoutname = name;
+
 END//
 
 # Finds a workout based on the difficulty
 DROP PROCEDURE IF EXISTS findWorkOutByDifficulty;
 CREATE PROCEDURE findWorkOutByDifficulty(IN difficulty_p INT)
 BEGIN
-	
-    # Result vars
-    DECLARE w_id_v, difficulty_v INT;
-    DECLARE description_v, equipment_v, muscle_group_v VARCHAR(999);
-    DECLARE name_v VARCHAR(20);
-    DECLARE exercise_type_v VARCHAR(99);
-    
-    # Cursor and Loop vars
-    DECLARE row_not_found TINYINT DEFAULT FALSE;
-    DECLARE workout_cursor CURSOR FOR
-		SELECT * FROM workout WHERE difficulty_p = diffIculty;
-	
-    DECLARE EXIT HANDLER FOR NOT FOUND
-		SET row_not_found = TRUE;
-        
-	OPEN workout_cursor;
-    
-	WHILE row_not_found = FALSE DO
-		FETCH workout_cursor INTO w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-        SELECT w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-	END WHILE;
-    CLOSE workout_cursor;
+
+	SELECT * FROM workout WHERE difficulty_p = diffIculty;
     
 END//
 
@@ -66,30 +46,8 @@ END//
 DROP PROCEDURE IF EXISTS findWorkOutByEquipment;
 CREATE PROCEDURE findWorkOutByEquipment(IN equipment_p VARCHAR(999))
 BEGIN
-	
-    # Result vars
-    DECLARE w_id_v, difficulty_v INT;
-    DECLARE description_v, equipment_v, muscle_group_v VARCHAR(999);
-    DECLARE name_v VARCHAR(20);
-    DECLARE exercise_type_v VARCHAR(99);
-    
-    # Cursor and Loop vars
-    DECLARE row_not_found TINYINT DEFAULT FALSE;
-    DECLARE workout_cursor CURSOR FOR
-		SELECT * FROM workout WHERE equipment LIKE CONCAT('%', equipment_p, '%');
-	
-    DECLARE EXIT HANDLER FOR NOT FOUND
-		SET row_not_found = TRUE;
-        
-	OPEN workout_cursor;
-    
-	WHILE row_not_found = FALSE DO
-		FETCH workout_cursor INTO w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-        SELECT w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-	END WHILE;
-    CLOSE workout_cursor;
+
+	SELECT * FROM workout WHERE equipment LIKE CONCAT('%', equipment_p, '%');
     
 END//
 
@@ -97,30 +55,8 @@ END//
 DROP PROCEDURE IF EXISTS findWorkOutByMuscleGroup;
 CREATE PROCEDURE findWorkOutByMuscleGroup(IN muscle_group_p VARCHAR(999))
 BEGIN
-	
-    # Result vars
-    DECLARE w_id_v, difficulty_v INT;
-    DECLARE description_v, equipment_v, muscle_group_v VARCHAR(999);
-    DECLARE name_v VARCHAR(20);
-    DECLARE exercise_type_v VARCHAR(99);
-    
-    # Cursor and Loop vars
-    DECLARE row_not_found TINYINT DEFAULT FALSE;
-    DECLARE workout_cursor CURSOR FOR
-		SELECT * FROM workout WHERE muscle_group LIKE CONCAT('%', muscle_group_p, '%');
-	
-    DECLARE EXIT HANDLER FOR NOT FOUND
-		SET row_not_found = TRUE;
-        
-	OPEN workout_cursor;
-    
-	WHILE row_not_found = FALSE DO
-		FETCH workout_cursor INTO w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-        SELECT w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-	END WHILE;
-    CLOSE workout_cursor;
+
+	SELECT * FROM workout WHERE muscle_group LIKE CONCAT('%', muscle_group_p, '%');
     
 END//
 
@@ -128,30 +64,8 @@ END//
 DROP PROCEDURE IF EXISTS findWorkOutByExercise;
 CREATE PROCEDURE findWorkOutByExercise(IN exercise_type_p VARCHAR(999))
 BEGIN
-	
-    # Result vars
-    DECLARE w_id_v, difficulty_v INT;
-    DECLARE description_v, equipment_v, muscle_group_v VARCHAR(999);
-    DECLARE name_v VARCHAR(20);
-    DECLARE exercise_type_v VARCHAR(99);
-    
-    # Cursor and Loop vars
-    DECLARE row_not_found TINYINT DEFAULT FALSE;
-    DECLARE workout_cursor CURSOR FOR
-		SELECT * FROM workout WHERE exercise_type LIKE CONCAT('%', exercise_type_p, '%');
-	
-    DECLARE EXIT HANDLER FOR NOT FOUND
-		SET row_not_found = TRUE;
-        
-	OPEN workout_cursor;
-    
-	WHILE row_not_found = FALSE DO
-		FETCH workout_cursor INTO w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-        SELECT w_id_v, name_v, description_v, equipment_v, 
-		muscle_group_v, difficulty_v, exercise_type_v;
-	END WHILE;
-    CLOSE workout_cursor;
+
+	SELECT * FROM workout WHERE exercise_type LIKE CONCAT('%', exercise_type_p, '%');
     
 END//
 
@@ -159,31 +73,19 @@ END//
 DROP PROCEDURE IF EXISTS findUserAchievements;
 CREATE PROCEDURE findUserAchievements(IN user_p VARCHAR(64))
 BEGIN
-	
-    # Result vars
-    DECLARE a_id_v, points_v INT;
-    DECLARE a_name_v, user_id_v VARCHAR(64);
-    DECLARE description_v VARCHAR(500);
-    
-    # Cursor var and Loop vars
-    DECLARE row_not_found TINYINT DEFAULT FALSE;
-    DECLARE achievement_cursor CURSOR FOR
-		SELECT user_id, achievements.* FROM user_achievements 
-			JOIN achievements ON user_achievements.a_id = achievements.a_id
-            WHERE user_p = user_id;
-            
-	    DECLARE EXIT HANDLER FOR NOT FOUND
-		SET row_not_found = TRUE;
-        
-	OPEN achievement_cursor;
-    
-	WHILE row_not_found = FALSE DO
-		FETCH achievement_cursor INTO user_id_v, a_id_v, a_name_v, description_v, points_v;
-        SELECT user_id_v, a_id_v, a_name_v, description_v, points_v;
-	END WHILE;
-    CLOSE achievement_cursor;
+
+    SELECT user_id, achievements.* FROM user_achievements 
+		JOIN achievements ON user_achievements.a_id = achievements.a_id
+		WHERE user_p = user_id;
 END//
 
+
+
+
+
+
+
+/*
 DELIMITER ;
 # Tests related to login management
 DELETE FROM user_account WHERE user_id = "dannyson900";
@@ -220,6 +122,7 @@ INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty
 INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
 	VALUES (5, 'one_equipment', 'a workout with 1 equipment', 'dumbbell', 'arms', 5, 'cardio');
 SELECT * FROM workout;  
+
 CALL findWorkOutByDifficulty(5);
 CALL findWorkOutByEquipment('dumbbell');
 CALL findWorkOutByMuscleGroup('legs');
@@ -255,3 +158,5 @@ SELECT * FROM user_achievements JOIN achievements ON user_achievements.a_id = ac
 CALL findUserAchievements('dannyson900');
 CALL findUserAchievements('obama');
 CALL findUserAchievements('stacy');
+/*
+
