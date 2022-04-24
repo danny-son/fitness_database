@@ -47,9 +47,9 @@ CREATE TABLE workout
 name VARCHAR(20) NOT NULL,
 description VARCHAR(999) NOT NULL,
 equipment VARCHAR(999) NOT NULL,
-muscle_group VARCHAR(20) NOT NULL,
-difficulty VARCHAR(20) NOT NULL,
-exercise_type VARCHAR(20) NOT NULL);
+muscle_group VARCHAR(999) NOT NULL,
+difficulty INT NOT NULL, # 1 - 10 scale; 1 meaning easy for everyone, 10 meaning only experts should try this
+exercise_type VARCHAR(99) NOT NULL);
 
 /*
 CREATE TABLE equipment
