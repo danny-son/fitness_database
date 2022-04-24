@@ -61,7 +61,6 @@ CREATE TABLE workout
 name VARCHAR(64) NOT NULL,
 description VARCHAR(999) NOT NULL,
 equipment VARCHAR(999) NOT NULL,
-
 muscle_group VARCHAR(999) NOT NULL,
 difficulty INT NOT NULL, # 1 - 10 scale; 1 meaning easy for everyone, 10 meaning only experts should try this
 exercise_type VARCHAR(99) NOT NULL);
@@ -69,13 +68,13 @@ exercise_type VARCHAR(99) NOT NULL);
 
 -- examples of tuples for workout, the user will only be able to view workouts
 INSERT INTO workout VALUES 
-(2, "Squat", "Calisthenics exercise that starts from a standing position and is done by lowering the hip", "none", "glutes, hamstrings, quads", "low", "calisthenics"),
-(1, "Pull-up", "Calisthenics exercise that starts with the body suspended by holding onto a horizontal bar with the hands and done by pulling the body up so the chin is parallel with the bar", "pull-up bar", "abdominals. back, biceps, forearms, shoulders", "moderate-high", "calisthenics"),
-(0, "Pushup", "Calisthenics exercise starting from the prone position and done by raising and lowering the body using the arms", "none", "abdominals, deltoids, pectoral, triceps", "moderate", "calisthenics"),
-(3, "Plank", "Isometric exercise that starts at the prone position and is done by maintaining said position for a duration of time", "none", "abdominals, glutes, obliques", "low", "isometric"),
-(4, "One-arm concentration curl", "Isolated bicep curl that uses a dumbbell and is done while sitting", "dumbbell", "biceps. forearms", "moderate-low", "weight-training"),
-(5, "Barbell reverse curl", "Bicep curl that uses a barbell where the hands are holding the bar from on-top and is done while standing and by tucking the elbows towards the side of the torso while pulling the barbell towards the shoulders", "barbell", "biceps, forearms", "moderate-low", "weight-training"),
-(6, "Deadlift", "Exercise that uses a barbell, starts with barbell on the ground and is done by squatting and pulling the bar up to the hips using the legs and core", "barbell", "abdominals, glutes, hamstrings, quads, traps", "moderate", "weight-training");
+(2, "Squat", "Calisthenics exercise that starts from a standing position and is done by lowering the hip", "none", "glutes, hamstrings, quads", 1, "calisthenics"),
+(1, "Pull-up", "Calisthenics exercise that starts with the body suspended by holding onto a horizontal bar with the hands and done by pulling the body up so the chin is parallel with the bar", "pull-up bar", "abdominals. back, biceps, forearms, shoulders", 6, "calisthenics"),
+(0, "Pushup", "Calisthenics exercise starting from the prone position and done by raising and lowering the body using the arms", "none", "abdominals, deltoids, pectoral, triceps", 4, "calisthenics"),
+(3, "Plank", "Isometric exercise that starts at the prone position and is done by maintaining said position for a duration of time", "none", "abdominals, glutes, obliques", 2, "isometric"),
+(4, "One-arm concentration curl", "Isolated bicep curl that uses a dumbbell and is done while sitting", "dumbbell", "biceps. forearms", 3, "weight-training"),
+(5, "Barbell reverse curl", "Bicep curl that uses a barbell where the hands are holding the bar from on-top and is done while standing and by tucking the elbows towards the side of the torso while pulling the barbell towards the shoulders", "barbell", "biceps, forearms", 3, "weight-training"),
+(6, "Deadlift", "Exercise that uses a barbell, starts with barbell on the ground and is done by squatting and pulling the bar up to the hips using the legs and core", "barbell", "abdominals, glutes, hamstrings, quads, traps", 5 , "weight-training");
 
 
 
@@ -112,7 +111,7 @@ ON UPDATE CASCADE ON DELETE CASCADE);
 
 -- create table for meal
 CREATE TABLE meal
-(meal_id INT NOT NULL PRIMARY KEY,
+(meal_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 description VARCHAR(500) NOT NULL,
 total_calories INT NOT NULL,
 carbs_g INT NOT NULL,
@@ -120,13 +119,13 @@ protein_g INT NOT NULL,
 fat_g INT NOT NULL); 
 
 -- examples of tuples for meal, the user will be able perform CRUD operation on meals
-INSERT INTO meal VALUES 
-(0, "Banana oatmeal (1 cup oats) w/ low-fat milk (1 cup)", 490, 97, 7 ,19),
-(1, "Tofu scramble", 385, 10, 29,28),
-(2, "Egg-white omelet (4 egg whites, 1 whole egg) with spinach (1 cup) and oyster mushrooms (½ cup)", 235.4, 5.3, 26, 12.2),
-(3, "Avocado tuna salad", 472, 19, 36, 31),
-(4, "Chicken broccoli casserole", 492,39,22,37),
-(5, "Chicken caprese sandwich", 275,8,34,11);
+INSERT INTO meal (description, total_calories, carbs_g, protein_g, fat_g) VALUES 
+("Banana oatmeal (1 cup oats) w/ low-fat milk (1 cup)", 490, 97, 7 ,19),
+("Tofu scramble", 385, 10, 29,28),
+("Egg-white omelet (4 egg whites, 1 whole egg) with spinach (1 cup) and oyster mushrooms (½ cup)", 235.4, 5.3, 26, 12.2),
+("Avocado tuna salad", 472, 19, 36, 31),
+("Chicken broccoli casserole", 492,39,22,37),
+("Chicken caprese sandwich", 275,8,34,11);
 
 
 
