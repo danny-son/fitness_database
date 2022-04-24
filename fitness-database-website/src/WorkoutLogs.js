@@ -8,8 +8,7 @@ export default function WorkoutLogs() {
     const navigate = useNavigate();
     const handleLogout = e => {      
         e.preventDefault();
-        User.logout()
-        console.log(User.username);
+        User.logout();
         navigate('../fitness_database/login');
     };
 

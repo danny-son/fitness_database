@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+//call to connect to our database
 app.post("/connect-database", (req,res) => {
   const user = req.body.username;
   const password = req.body.password;
@@ -31,6 +32,8 @@ app.post("/connect-database", (req,res) => {
   });
 });
 
+
+//user calls to validate login and registration
 app.get("/check-user-exists", (req,res) => {
   const user = req.query.username;
   let sql = `CALL userExists(\"${user}\")`;
@@ -66,15 +69,59 @@ app.get("/login-user", (req,res) => {
   const user = req.query.username;
   const pass = req.query.password;
   let sql = `SELECT loginUser(\"${user}\", \"${pass}\") AS output`;
-  connection.query(sql, (error, results, fields) => {
-     let output = JSON.parse(JSON.stringify(results[0].output));
-     if (output == 1) {
+  connection.query(sql, (err,results) => {
+    if (err) {
+      console.log(err);
+    } else {
+       let output = JSON.parse(JSON.stringify(results[0].output));
+       if (output == 1) {
        res.status(200).send("Login succesful");
-     } else {
+       } else {
        res.status(401).send("account not found");
-     }
+       }
+    } 
   });
 });
+
+//viewing our achievements and user achievements unlocked
+app.get("/userAchievements", (req,res) => {
+  const user = req.query.username;
+  let sql = `CALL findUserAchievements(\"${user}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.get("/viewAchievements", (req,res) => {
+  let sql = `CALL viewAchievements()`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  })
+})
+
+
+//CRUD for diet log
+
+
+//CRUD for workout log
+
+//CRUD for meals
+
+//CRUD for 
 
 app.listen(3001, () => {
   console.log("running server");

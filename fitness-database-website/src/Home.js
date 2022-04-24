@@ -8,7 +8,6 @@ export default function Home() {
     const handleLogout = e => {      
         e.preventDefault();
         User.logout()
-        console.log(User.username);
         navigate('../fitness_database/login');
     };
 
