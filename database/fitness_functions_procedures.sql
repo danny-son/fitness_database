@@ -190,8 +190,7 @@ BEGIN
     
 END//
 
-
-
+### Programing objects based on achievements
 # Gets the achievements earned by a specified user
 DELIMITER ;
 DROP PROCEDURE IF EXISTS findUserAchievements;
@@ -203,7 +202,29 @@ BEGIN
 		WHERE user_p = user_id;
 END//
 
+# Gets the amount of points of a user based on their achievements
+DELIMITER ;
+DROP FUNCTION IF EXISTS getUserPoints;
+DELIMITER //
+CREATE FUNCTION getUserPoints(user_p VARCHAR(64))
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE total_points INT;
 
+    WITH user_p_achievements AS
+    (SELECT user_id, achievements.* FROM user_achievements 
+		JOIN achievements ON user_achievements.a_id = achievements.a_id
+		WHERE user_p = user_id)
+		SELECT SUM(user_p_achievements.points) FROM user_p_achievements
+        INTO total_points;
+	
+    RETURN total_points;
+END//
+
+
+### Programming objects based on meals
 DELIMITER ;
 DROP PROCEDURE IF EXISTS addMeal;
 DELIMITER //
@@ -230,80 +251,110 @@ BEGIN
 	DELETE FROM meal WHERE id = meal_id;
 END//
 
-
-/* Testing our functions / procedures
+# Finds a meal based on specified calories, can specify operators
 DELIMITER ;
-DELETE FROM user_account WHERE user_id = "dannyson900";
-INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("dannyson900", "testing1", "2022-04-18",1);
-CALL userExists("testing");
-SELECT (loginUser("dannyson900", "test-false")) as logged_user;
-SELECT (loginUser("dannyson900","testing1")) as logged_user;
-SELECT * FROM user_account;
+DROP PROCEDURE IF EXISTS findMealByCalories;
+DELIMITER //
+CREATE PROCEDURE findMealByCalories(
+	IN total_calories_p INT, IN op_cal_p VARCHAR(4)
+)
+BEGIN
+	IF op_cal_p IS NULL THEN
+		SELECT * FROM meal WHERE meal.total_calories = total_calories_p;
+	ELSEIF op_cal_p = '<' THEN
+		SELECT * FROM meal WHERE meal.total_calories < total_calories_p;
+	ELSEIF op_cal_p = '>' THEN
+		SELECT * FROM meal WHERE meal.total_calories > total_calories_p;
+	ELSEIF op_cal_p = '<=' THEN
+		SELECT * FROM meal WHERE meal.total_calories <= total_calories_p;
+	ELSEIF op_cal_p = '>=' THEN
+		SELECT * FROM meal WHERE meal.total_calories >= total_calories_p;
+	END IF;
+END //
 
-*/
-
-/*
+# Finds a meal based on carbs count, can specify operators
 DELIMITER ;
-# Tests related to login management
-DELETE FROM user_account WHERE user_id = "dannyson900";
-INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("dannyson900", "testing1", "2022-04-18",1);
-SELECT * FROM user_account;
-CALL userExists("dannyson900");
-SELECT (loginUser("dannyson900", "test-false")) as logged_user;
-SELECT (loginUser("dannyson900","testing1")) as logged_user;
-SELECT * FROM user_account;
-# Tests related to workouts
--- workOutExists(...)
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (0, 'pushup', 'Calisthenics exercise starting from the prone position and done by raising and lowering the body using the arms',
-			'none', 'abdominals, deltoids, pectoral, triceps', '5', 'calisthenics');
-CALL workOutExists('pushup');
-CALL workOutExists('coffee');
-DELETE FROM workout WHERE w_id = 0;
-CALL workOutExists('pushup');
--- findWorkOutByDifficulty/Equipment/MuscleGroup/Exercise(...)
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (0, 'pushup', 'Calisthenics exercise starting from the prone position and done by raising and lowering the body using the arms',
-			'none', 'abdominals, deltoids, pectoral, triceps', 5, 'calisthenics');
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (1, 'test', 'test', 'none', 'none', 0, 'nothing');
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (2, 'hard_workout_1', 'hardest workout ever', 'none', 'every muscle', 10, 'everything');
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (3, 'moderate_workout', 'a moderate workout', 'none', 'legs', 5, 'cardio');
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (4, 'many_equipments', 'a workout with a lot of equipments',
-    'pullup_bar, dumbbell, towel, headband, chicken', 'legs', 5, 'cardio');
-INSERT INTO workout(w_id, name, description, equipment, muscle_group, difficulty, exercise_type)
-	VALUES (5, 'one_equipment', 'a workout with 1 equipment', 'dumbbell', 'arms', 5, 'cardio');
-SELECT * FROM workout;  
-CALL findWorkOutByDifficulty(5);
-CALL findWorkOutByEquipment('dumbbell');
-CALL findWorkOutByMuscleGroup('legs');
-CALL findWorkOutByExercise('cardio');
-DELETE FROM workout WHERE w_id >= 0;  
-# Tests related to achievements
--- findUserAchievements(...)
-INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("dannyson900", "testing1", "2022-04-18", 1);
-INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("swagman4", "testing3", "2022-04-18", 1);
-INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("obama", "password", "2022-04-18", 1);
-INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES ("travis", "penutbutter7", "2022-04-18", 100);
-SELECT * FROM user_account;
-INSERT INTO achievements(a_id, name, description, points) VALUES (0, 'test1', 'winrar', 10);
-INSERT INTO achievements(a_id, name, description, points) VALUES (1, 'test2', 'biggerwinrar', 20);
-INSERT INTO achievements(a_id, name, description, points) VALUES (2, 'test3', 'superbwinrar', 100);
-INSERT INTO achievements(a_id, name, description, points) VALUES (3, 'test4', 'hugewinrar', 1000);
-SELECT * FROM achievements;
-INSERT INTO user_achievements(achievement_unlock_id, user_id, a_id, time_unlock) VALUES(0, 'dannyson900', 0, '2022-04-19');
-INSERT INTO user_achievements(achievement_unlock_id, user_id, a_id, time_unlock) VALUES(1, 'dannyson900', 1, '2022-04-20');
-INSERT INTO user_achievements(achievement_unlock_id, user_id, a_id, time_unlock) VALUES(2, 'dannyson900', 2, '2022-04-21');
-INSERT INTO user_achievements(achievement_unlock_id, user_id, a_id, time_unlock) VALUES(3, 'obama', 0, '2022-04-20');
-INSERT INTO user_achievements(achievement_unlock_id, user_id, a_id, time_unlock) VALUES(4, 'dannyson900', 3, '2022-04-21');
-INSERT INTO user_achievements(achievement_unlock_id, user_id, a_id, time_unlock) VALUES(5, 'travis', 2, '2022-04-19');
-SELECT * FROM user_achievements;
-SELECT * FROM user_achievements JOIN achievements ON user_achievements.a_id = achievements.a_id;
-CALL findUserAchievements('dannyson900');
-CALL findUserAchievements('obama');
-CALL findUserAchievements('stacy');
-/*
+DROP PROCEDURE IF EXISTS findMealByCarbs;
+DELIMITER //
+CREATE PROCEDURE findMealByCarbs(
+	IN carbs_p INT, IN op_carbs_p VARCHAR(4)
+)
+BEGIN
+	IF op_carbs_p IS NULL THEN
+		SELECT * FROM meal WHERE meal.carbs_g = carbs_p;
+	ELSEIF op_carbs_p = '<' THEN
+		SELECT * FROM meal WHERE meal.carbs_g < carbs_p;
+	ELSEIF op_carbs_p = '>' THEN
+		SELECT * FROM meal WHERE meal.carbs_g > carbs_p;
+	ELSEIF op_carbs_p = '<=' THEN
+		SELECT * FROM meal WHERE meal.carbs_g <= carbs_p;
+	ELSEIF op_carbs_p = '>=' THEN
+		SELECT * FROM meal WHERE meal.carbs_g >= carbs_p;
+	END IF;
+END //
+
+# Finds a meal based on protein count, can specify operators
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findMealByProtein;
+DELIMITER //
+CREATE PROCEDURE findMealByProtein(
+	IN pro_p INT, IN op_pro_p VARCHAR(4)
+)
+BEGIN
+	IF op_pro_p IS NULL THEN
+		SELECT * FROM meal WHERE meal.protein_g = pro_p;
+	ELSEIF op_pro_p = '<' THEN
+		SELECT * FROM meal WHERE meal.protein_g < pro_p;
+	ELSEIF op_pro_p = '>' THEN
+		SELECT * FROM meal WHERE meal.protein_g > pro_p;
+	ELSEIF op_pro_p = '<=' THEN
+		SELECT * FROM meal WHERE meal.protein_g <= pro_p;
+	ELSEIF op_pro_p = '>=' THEN
+		SELECT * FROM meal WHERE meal.protein_g >= pro_p;
+	END IF;
+END //
+
+# Finds a meal based on fat content, can specify operators
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findMealByFat;
+DELIMITER //
+CREATE PROCEDURE findMealByFat(
+	IN fat_p INT, IN op_fat_p VARCHAR(4)
+)
+BEGIN
+	IF op_fat_p IS NULL THEN
+		SELECT * FROM meal WHERE meal.fat_g = fat_p;
+	ELSEIF op_fat_p = '<' THEN
+		SELECT * FROM meal WHERE meal.fat_g < fat_p;
+	ELSEIF op_fat_p = '>' THEN
+		SELECT * FROM meal WHERE meal.fat_g > fat_p;
+	ELSEIF op_fat_p = '<=' THEN
+		SELECT * FROM meal WHERE meal.fat_g <= fat_p;
+	ELSEIF op_fat_p = '>=' THEN
+		SELECT * FROM meal WHERE meal.fat_g >= fat_p;
+	END IF;
+END //
+
+### Programming objects related to logs
+# Gets latest log from a user
+DELIMITER ;
+DROP PROCEDURE IF EXISTS getLatestLog;
+DELIMITER //
+CREATE PROCEDURE getLatestLog(user_p VARCHAR(64))
+BEGIN
+	SELECT * FROM log WHERE 
+		datetime = (SELECT MAX(datetime) as latest_date FROM log WHERE user_id = user_p) 
+		AND user_id = user_p;
+END//
+
+# Gets all logs from a user
+DELIMITER ; 
+DROP PROCEDURE IF EXISTS getLogsFromUser;
+DELIMITER //
+CREATE PROCEDURE getLogsFromUser(user_p VARCHAR(64))
+BEGIN
+	SELECT * FROM log WHERE user_id = user_p;
+END //
+
+
 
