@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Achievements from './Achievements';
 import DietLogs from './DietLogs';
 import WorkoutLogs from './WorkoutLogs';
+import AddWorkout from './AddWorkout';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path='/fitness_database/achievements' element={<Achievements/>}/>
           <Route path='/fitness_database/workout_logs' element={<WorkoutLogs/>}/>
           <Route path='/fitness_database/diet_logs' element={<DietLogs/>}/>
+          <Route path='/fitness_database/add_workout' element={<AddWorkout/>}/>
         </Routes>
       </Router>
     </div>

@@ -111,17 +111,112 @@ app.get("/viewAchievements", (req,res) => {
       }
     }
   })
-})
+});
+
+
+
+//CRUD for workout log
+app.get("/viewWorkoutDifficulty", (req,res) => {
+  const param = req.query.difficulty;
+  let sql = `Call findWorkOutByDifficulty(\"${param}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.get("/viewWorkoutAll", (req, res) => {
+  let sql = `Call viewAllWorkouts()`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.get("/viewWorkoutExercise", (req,res) => {
+  const param = req.query.value;
+  let sql = `Call findWorkOutByExercise(\"${param}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.get("/viewWorkoutEquipment", (req,res) =>{
+  const param = req.query.value;
+  let sql = `Call findWorkOutByEquipment(\"${param}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.get("/viewWorkoutName", (req,res) => {
+  const param = req.query.value;
+  let sql = `Call workOutExists(\"${param}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.get("/viewWorkoutMuscle", (req,res) => {
+  const param = req.query.value;
+  let sql = `Call findWorkOutByMuscleGroup(\"${param}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
+});
+
+app.post("logWorkout", (req,res) => {
+
+});
 
 
 //CRUD for diet log
 
 
-//CRUD for workout log
-
 //CRUD for meals
 
-//CRUD for 
+//Delete the user
+
 
 app.listen(3001, () => {
   console.log("running server");

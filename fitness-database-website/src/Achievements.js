@@ -49,6 +49,9 @@ export default function Achievements() {
         }
     });
 
+    function handleClick(key) {
+        console.log('Clicked on index:' + key)
+    }
     //view achievement
     return (
         <div>
@@ -63,6 +66,7 @@ export default function Achievements() {
                     <p>Name: {val.name}</p>
                     <p>Description: {val.description}</p>
                     <p>Points: {val.points}</p>
+                    <button onClick={() => handleClick(key)}>CLick to get index</button>
                 </div>;
             })}
             </div>
@@ -74,6 +78,7 @@ export default function Achievements() {
                     <p>Name: {val.name}</p>
                     <p>Description: {val.description}</p>
                     <p>Points: {val.points}</p>
+                    <button onClick={console.log(key)}>CLick to get index</button>
                 </div>;
             })}
             </div>
