@@ -8,7 +8,9 @@
 
 2.) type in the following command: ```cd fitness-database-website/src```
 
-3.) type in the command ```npm start``` which will run the webapp 
+3.) call ```npm i``` to install all the package dependencies for this webapp
+
+4.) type in the command ```npm start``` which will run the webapp 
 
 #### On the second terminal 
 
