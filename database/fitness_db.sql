@@ -49,7 +49,7 @@ CREATE TABLE user_achievements
 (achievement_unlock_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 user_id VARCHAR(64) NOT NULL,
 a_id INT NOT NULL,
-date_unlock DATE NOT NULL,
+date_unlock DATETIME NOT NULL,
 FOREIGN KEY (a_id) REFERENCES achievements(a_id)
 ON UPDATE CASCADE ON DELETE CASCADE,
 FOREIGN KEY (user_id) REFERENCES user_account(user_id)
@@ -90,10 +90,11 @@ FOREIGN KEY (w_id) REFERENCES workout(w_id)
 ON UPDATE CASCADE ON DELETE CASCADE);
 */
 
+
 -- table for log
 CREATE TABLE `log`
 (log_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-datetime DATETIME NOT NULL,
+date DATE NOT NULL,
 description VARCHAR(500) NOT NULL,
 user_id VARCHAR(24) NOT NULL,
 FOREIGN KEY (user_id) REFERENCES user_account(user_id)

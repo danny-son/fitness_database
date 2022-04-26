@@ -1,7 +1,6 @@
-import Axios from 'axios';
-import React, {useState} from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import User from './objects';
+import User from './User';
 
 export default function Home() {
     const navigate = useNavigate();

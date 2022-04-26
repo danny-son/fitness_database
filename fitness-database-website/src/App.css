@@ -2,18 +2,18 @@
   text-align: center;
 }
 
-.all-achievements, .workouts{
+.all-achievements, .workouts {
   display: flex;
   align-items: center;
   flex-direction: column;
   width: 100%;
 }
 
-.workout p, .achievement p {
+.workout p, .achievement p, .log-index p {
   margin-right: 15px;
 }
 
-.workout {
+.workout  {
    width: 1000px;
   height: 140px;
   background-color: antiquewhite;
@@ -21,6 +21,14 @@
   flex-direction: row;
   border: 1px solid black;
   margin: 12px;
+}
+
+.edit-workout {
+  height: 400px;
+  background-color: antiquewhite;
+  align-items: center;
+  border: 1px solid black;
+  margin: 10px;
 }
 
 .achievement, .user-achievement{
@@ -31,6 +39,26 @@
   flex-direction: row;
   border: 1px solid black;
   margin: 10px;
+}
+.log-index {
+  width: 700px;
+  height: 150px;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  margin: 10px;
+}
+.add-log, .log-list{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+
+.w_input {
+  width: 500px;
 }
 
 .user-achievement {
