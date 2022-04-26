@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import User from './User';
 import WorkoutLog from './WorkoutLog';
 
-export default function EditWorkout() {
+export default function EditWorkoutLog() {
     const navigate = useNavigate();
     const [newDate, setNewDate] = useState(WorkoutLog.date);
     const [newDescription, setNewDescription] = useState(WorkoutLog.description);

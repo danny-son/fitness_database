@@ -1,26 +1,73 @@
 import Axios from 'axios';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import User from './User';
 
 export default function DietLogs() {
     const navigate = useNavigate();
-    const handleLogout = e => {      
-        e.preventDefault();
-        User.logout();
-        navigate('../fitness_database/login');
-    };
+    const [logs, setLogs] = useState([]);
+    const [count, setCount] = useState(0);
 
-    const handleNavigation = e => {
+
+    const handleHomeNav = e => {
         e.preventDefault();
         navigate('../fitness_database/home');
     }
 
+    const handleLogoutNav = e => {
+        e.preventDefault();
+        User.logout();
+        navigate('../fitness_database/login');
+    }
+
+    const handleDietLogNav = e => {
+        e.preventDefault();
+        navigate('../fitness_database/add_diet_log');
+    }
+
+    function handleEdit(key) {
+        navigate('../fitness_database/edit_diet_log');
+    }
+
+    async function loadWorkoutLogs() {
+        const url = "http://localhost:3001/viewWorkoutLogs";
+        await Axios.get(url, {
+            params: {
+                username: User.username
+            }
+        }).then((response) => {
+            setLogs(response.data);
+        }).catch(() => {
+            console.log('error loading workout logs');
+        });
+    }
+
+    async function handleDelete(key) {
+        const url = "http://localhost:3001/deleteDietLog";
+        const id = logs[key].log_id;
+        await Axios.delete(url, {
+            params: {
+                id: id
+            }
+        }).then(() => {
+            loadWorkoutLogs();
+        }).catch(() => {
+            console.log('error deleting workout log');
+        });    
+    }
+
+    useEffect(() => {
+        if (count == 0) {
+            //loadWorkoutLogs();
+            setCount(count+1);
+        }
+    });
+
     return (
         <div>
             <h1>{User.username}'s Diet Logs:</h1>
-            <button onClick={handleNavigation}>Back to homepage</button>
-            <button onClick={handleLogout}>Logout</button>
+             <button onClick={handleHomeNav}>Back to homepage</button>
+            <button onClick={handleLogoutNav}>Logout</button>
         </div>
     );
 }

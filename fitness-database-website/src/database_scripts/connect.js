@@ -265,9 +265,58 @@ app.delete("/deleteWorkoutLog", (req,res) => {
 
 
 //CRUD for diet log
+app.post("/addDietLog", (req,res) => {
+
+});
+
+app.get("/viewAllDietLogs", (req,res) => {
+
+});
+
+app.put("/editDietLog", (req,res) => {
+
+});
+
+app.delete("/deleteDietLog", (req,res) => {
+
+});
+
 
 
 //CRUD for meals
+app.post("/addMeal", (req,res) => {
+
+});
+
+app.put("/editMeal", (req,res) => {
+
+});
+
+app.delete("/deleteMeal", (req,res) => {
+
+});
+
+app.get("/viewAllMeals", (req,res) => {
+
+});
+
+app.get("/viewAllMealsByCalories", (req,res) => {
+
+});
+
+app.get("/viewAllMealsByProtein", (req,res) => {
+
+});
+
+app.get("/viewAllMealsByFat", (req,res) => {
+
+});
+
+app.get("/viewAllMealsByCarbs", (req,res) => {
+
+});
+
+
 
 //update username and password
 app.put("/updateUserAccount", (req,res) => {

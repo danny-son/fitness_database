@@ -29,7 +29,7 @@ export default function WorkoutLogs() {
     function handleEdit(key) {
         WorkoutLog.setUp(logs[key].log_id, logs[key].name,
              logs[key].date.slice(0,10), logs[key].description, logs[key].workout_length);
-        navigate('../fitness_database/edit_workout');
+        navigate('../fitness_database/edit_workout_log');
     }
 
     async function loadWorkoutLogs() {
