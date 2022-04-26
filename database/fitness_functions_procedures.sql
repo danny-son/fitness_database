@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS userExists;
 DELIMITER //
 CREATE PROCEDURE userExists(IN username VARCHAR(64))
 BEGIN
- SELECT * FROM user_account WHERE username = user_id;
+	SELECT * FROM user_account WHERE username = user_id;
 END//
 
 DELIMITER ;
@@ -13,22 +13,24 @@ DELIMITER //
 CREATE FUNCTION loginUser(username VARCHAR(64), pass VARCHAR(64)) RETURNS INT
 NOT DETERMINISTIC READS SQL DATA
 BEGIN
- DECLARE query_count INT;
- SELECT count(*) INTO query_count FROM user_account WHERE username = user_id AND pass = password;
- RETURN query_count;
+	DECLARE query_count INT;
+	SELECT count(*) INTO query_count FROM user_account WHERE username = user_id AND pass = password;
+	RETURN query_count;
 END//
-
-
 
 DELIMITER ;
 DROP PROCEDURE IF EXISTS insertUser;
 DELIMITER //
 CREATE PROCEDURE insertUser(IN username VARCHAR(64), IN pass VARCHAR(64), IN date DATE)
 BEGIN
- INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES (username, pass, date, 1);
- INSERT INTO user_achievements(user_id,a_id, date_unlock) VALUES (username,0,date);
+    DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+		SELECT CONCAT("user ('", username, "'), already exists") AS ERROR;
+    END;
+    
+	INSERT INTO user_account(user_id, password, reg_date, login_streak) VALUES (username, pass, date, 1);
+	INSERT INTO user_achievements(user_id,a_id, date_unlock) VALUES (username, 0, date);
 END//
-
 
 
 ### Programming objects based on workout objects
@@ -38,9 +40,7 @@ DROP PROCEDURE IF EXISTS workOutExists;
 DELIMITER //
 CREATE PROCEDURE workOutExists(IN workoutname VARCHAR(20))
 BEGIN
-
-  SELECT * FROM workout WHERE workoutname = name;
-
+	SELECT * FROM workout WHERE workoutname = name;
 END//
 
 # Finds a workout based on the difficulty
@@ -49,9 +49,7 @@ DROP PROCEDURE IF EXISTS findWorkOutByDifficulty;
 DELIMITER //
 CREATE PROCEDURE findWorkOutByDifficulty(IN difficulty_p INT)
 BEGIN
-
 	SELECT * FROM workout WHERE difficulty_p = diffIculty;
-    
 END//
 
 # Finds a workout based on what equipment is needed
@@ -71,9 +69,7 @@ DROP PROCEDURE IF EXISTS findWorkOutByMuscleGroup;
 DELIMITER //
 CREATE PROCEDURE findWorkOutByMuscleGroup(IN muscle_group_p VARCHAR(999))
 BEGIN
-
 	SELECT * FROM workout WHERE muscle_group LIKE CONCAT('%', muscle_group_p, '%');
-    
 END//
 
 # Finds a workout based on what type of exercise
@@ -83,7 +79,6 @@ DELIMITER //
 CREATE PROCEDURE findWorkOutByExercise(IN exercise_type_p VARCHAR(999))
 BEGIN
 	SELECT * FROM workout WHERE exercise_type LIKE CONCAT('%', exercise_type_p, '%');
-    
 END//
 
 # reads all the achievements shown
@@ -104,33 +99,6 @@ BEGIN
     SELECT user_id, achievements.* FROM user_achievements 
 		JOIN achievements ON user_achievements.a_id = achievements.a_id
 		WHERE user_p = user_id;
-END//
-
-
-DELIMITER ;
-DROP PROCEDURE IF EXISTS addMeal;
-DELIMITER //
-CREATE PROCEDURE addMeal(IN d_description VARCHAR(500), IN cals INT, IN carbs INT, IN protein INT, IN fat INT)
-BEGIN
-	 INSERT INTO meal(description, total_calories, carbs_g, protein_g, fat_g) VALUES (d_description, cals, carbs, protein,fat);
-END//
-
-DELIMITER ;
-DROP PROCEDURE IF EXISTS editMeal;
-DELIMITER //
-CREATE PROCEDURE editMeal(IN id INT, IN d_description VARCHAR(500), IN cals INT, IN carbs INT, IN protein INT, IN fat INT)
-BEGIN 
-	UPDATE meal
-    SET description = d_description, total_calories = cals, carbs_g = carbs, protein_g = protein, fat_g = fat
-    WHERE meal_id = id;
-END//
-
-DELIMITER ;
-DROP PROCEDURE IF EXISTS deleteMeal;
-DELIMITER //
-CREATE PROCEDURE deleteMeal(IN id INT)
-BEGIN 
-	DELETE FROM meal WHERE id = meal_id;
 END//
 
 

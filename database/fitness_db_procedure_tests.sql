@@ -102,3 +102,8 @@ CALL getLogsFromUser("dannyson900");
 CALL getLogsFromUser("obama");
 
 DELETE FROM log WHERE log_id >= 0;
+
+### Testing error handling
+
+CALL insertUser("bobdylan", "abc", "2022-04-30");
+CALL insertUser("bobdylan", "acc", "2022-05-01");
