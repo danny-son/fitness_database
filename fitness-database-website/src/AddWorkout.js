@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import User from './objects';
+import User from './User';
 
 
 export default function AddWorkout() {
@@ -12,6 +12,9 @@ export default function AddWorkout() {
     const [word, setWord] = useState();
     const [value, setValue] = useState(0);
     const [count, setCount] = useState(0);
+    const [workoutId, setWorkoutId] = useState();
+    const [description, setDescription] = useState();
+    const [workoutLength, setWorkoutLength] = useState();
     const handleNavBack = e => {
         e.preventDefault();
         navigate('../fitness_database/workout_logs');
@@ -19,7 +22,21 @@ export default function AddWorkout() {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log('submitting workout')
+        if (workoutId && description && workoutLength) {
+            const url = 'http://localhost:3001/logWorkout';
+            Axios.post(url, {
+                id: workoutId,
+                desc: description,
+                length: workoutLength,
+                username: User.username
+            }).then(() => {
+                navigate('../fitness_database/workout_logs');
+            }).catch(() => {
+                setError('Could not create a workout log make sure u enter a valid id for workout');
+            })
+        } else {
+            setError('Fill out all fields to enter a log');
+        }
     }
 
     const handleReadWorkouts = e => {
@@ -99,8 +116,17 @@ export default function AddWorkout() {
     return (
         <div>
             <h1>Log a workout</h1>
+            <div className='add-log'>
+                <label className='w_log'>Enter workout id:</label>
+                <input  type='number' onChange={e => setWorkoutId(e.target.value)}/>
+                <label className='w_log'>Description:</label>
+                <input className='w_input' type='text' onChange={e => setDescription(e.target.value)}/>
+                <label className='w_log'>Workout Length (mins):</label>
+                <input type='number' onChange={e => setWorkoutLength(e.target.value)}/>
+            </div>
             <button onClick={handleNavBack}>Cancel</button>
             <button onClick={handleSubmit}>Submit and go back!</button>
+            {error != 'Need to input a value from 1-10' && <p className='error'>{error}</p>}
             <div>
                 <h3>Select a filter to view the available workouts!</h3>
                 <select onChange={handleReadWorkouts}>
@@ -132,13 +158,13 @@ export default function AddWorkout() {
                         onChange={e => setValue(e.target.value)}>
                     </input>
                     <button onClick={handleDifficulty}>Submit</button>
-                    {error && <p className='error'>{error}</p>}
+                    {error == 'Need to input a value from 1-10' && <p className='error'>{error}</p>}
                     </div>
                 }
                 {workoutFilter == 'all' && <button onClick={() => loadWorkouts()}>Click to View all!</button>}
             </div>
             <div className='workouts'>
-                {workouts.map((val, key) => {
+                {workouts.map((val,key) => {
                 return <div className='workout'>
                     <p>Workout Id: {val.w_id}</p>
                     <p>Name: {val.name}</p>

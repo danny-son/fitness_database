@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import User from './objects';
+import User from './User';
 
 
 export default function Achievements() {
@@ -49,9 +49,6 @@ export default function Achievements() {
         }
     });
 
-    function handleClick(key) {
-        console.log('Clicked on index:' + key)
-    }
     //view achievement
     return (
         <div>
@@ -66,19 +63,19 @@ export default function Achievements() {
                     <p>Name: {val.name}</p>
                     <p>Description: {val.description}</p>
                     <p>Points: {val.points}</p>
-                    <button onClick={() => handleClick(key)}>CLick to get index</button>
                 </div>;
             })}
             </div>
             <h3>Achievments unlocked by user:</h3>
             <div className='all-achievements'>
                 {userAchievements.map((val, key) => {
+                const date = val.date_unlock.slice(0,10);
                 return <div className='user-achievement'>
                     <p>Achievement #{val.a_id}</p>
                     <p>Name: {val.name}</p>
                     <p>Description: {val.description}</p>
                     <p>Points: {val.points}</p>
-                    <button onClick={console.log(key)}>CLick to get index</button>
+                    <p>Date Unlocked: {date}</p>
                 </div>;
             })}
             </div>

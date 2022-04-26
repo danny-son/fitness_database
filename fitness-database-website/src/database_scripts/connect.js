@@ -54,7 +54,7 @@ app.get("/check-user-exists", (req,res) => {
 app.post("/register-user", (req,res) => {
   const user = req.body.username;
   const password = req.body.password;
-  const date = new Date().toJSON().slice(0,10);
+  const date = new Date().toJSON().slice(0, 10);
   let sql = `CALL insertUser(\"${user}\", \"${password}\",\"${date}\")`;
   connection.query(sql, (error) => {
     if (error) {
@@ -205,8 +205,62 @@ app.get("/viewWorkoutMuscle", (req,res) => {
   });
 });
 
-app.post("logWorkout", (req,res) => {
+app.post("/logWorkout", (req,res) => {
+  const username = req.body.username;
+  const w_id = req.body.id;
+  const description = req.body.desc;
+  const length = req.body.length;
+  const date = new Date().toJSON().slice(0, 10);
+  let sql = `SELECT logWorkout(\"${date}\",\"${description}\",\"${username}\",\"${w_id}\",\"${length}\") AS output`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log('could not create a workout log!');
+    } else {
+      res.status(200).send('created workout log!');
+    }
+  });
+});
 
+app.get("/viewWorkoutLogs", (req, res) => {
+  const username = req.query.username;
+  let sql = `CALL getWorkoutLogsFromUser(\"${username}\");`
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send(results[0]);
+    }
+  });
+});
+
+app.put("/updateWorkoutLog", (req,res) => {
+  const username = req.body.username;
+  const logId = req.body.logId;
+  const desc = req.body.description;
+  const date = req.body.date;
+  const length = req.body.length;
+
+  let sql = `CALL updateWorkoutLog(\"${logId}\",\"${username}\",\"${desc}\",\"${date}\",\"${length}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send('successfully udpated tuples');
+    }
+  });
+});
+
+
+app.delete("/deleteWorkoutLog", (req,res) => {
+  const id = req.query.id;
+  let sql = `CALL deleteWorkoutLog(\"${id}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("successfully deleted workout log!");
+    }
+  });
 });
 
 
@@ -215,8 +269,15 @@ app.post("logWorkout", (req,res) => {
 
 //CRUD for meals
 
-//Delete the user
+//update username and password
+app.put("updateUserAccount", (req,res) => {
 
+});
+
+//delete user account and anything associated with the user
+app.delete("deleteUserAccount", (req,res) => {
+
+});
 
 app.listen(3001, () => {
   console.log("running server");
