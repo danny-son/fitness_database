@@ -40,11 +40,7 @@ DROP PROCEDURE IF EXISTS workOutExists;
 DELIMITER //
 CREATE PROCEDURE workOutExists(IN workoutname VARCHAR(20))
 BEGIN
-<<<<<<< HEAD
 	SELECT * FROM workout WHERE workoutname = name;
-=======
-  SELECT * FROM workout WHERE workoutname = name;
->>>>>>> 2197018b5896eb4361fec8769d0c76e5cef0907a
 END//
 
 
@@ -86,7 +82,6 @@ BEGIN
 	SELECT * FROM workout WHERE exercise_type LIKE CONCAT('%', exercise_type_p, '%');
 END//
 
-<<<<<<< HEAD
 # reads all the achievements shown
 DELIMITER ; 
 DROP PROCEDURE IF EXISTS viewAchievements;
@@ -115,7 +110,12 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS workOutExists;
 DELIMITER //
 CREATE PROCEDURE workOutExists(IN workoutname VARCHAR(20))
-=======
+BEGIN
+  SELECT * FROM workout WHERE workoutname = name;
+END//
+
+
+
 # Returns all workouts
 DELIMITER ;
 DROP PROCEDURE IF EXISTS viewAllWorkouts;
@@ -131,9 +131,8 @@ DROP FUNCTION IF EXISTS logWorkout;
 DELIMITER //
 CREATE FUNCTION logWorkout(d_date DATE, d_description VARCHAR(500), username VARCHAR(64), work_id INT, len INT) RETURNS INT
 NOT DETERMINISTIC READS SQL DATA
->>>>>>> 2197018b5896eb4361fec8769d0c76e5cef0907a
 BEGIN
-	DECLARE query_count INT;
+    DECLARE query_count INT;
     DECLARE l_id INT;
     SELECT count(*) INTO query_count from workout WHERE work_id = w_id;
     -- if there was an invalid workout_id reutrn false
@@ -200,7 +199,6 @@ END//
 
 
 ### Programing objects based on achievements
-# Gets the achievements earned by a specified user
 
 # Gets the amount of points of a user based on their achievements
 DELIMITER ;
