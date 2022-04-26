@@ -24,7 +24,7 @@ export default function Login() {
       }
     }).then((response) => {
       if (response.status == 200) {
-        User.login(username);
+        User.update(username, password);
         navigate("/fitness_database/home")
       }
     }).catch(() => {

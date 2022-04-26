@@ -270,13 +270,30 @@ app.delete("/deleteWorkoutLog", (req,res) => {
 //CRUD for meals
 
 //update username and password
-app.put("updateUserAccount", (req,res) => {
-
+app.put("/updateUserAccount", (req,res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  let sql = `CALL updateUser(\"${username}\",\"${password}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("successfully updated user account");
+    }
+  });
 });
 
 //delete user account and anything associated with the user
-app.delete("deleteUserAccount", (req,res) => {
-
+app.delete("/deleteUserAccount", (req,res) => {
+  const username = req.query.username;
+  let sql = `CALL deleteUser(\"${username}\")`;
+  connection.query(sql,(err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("successfully updated user account");
+    }
+  });
 });
 
 app.listen(3001, () => {

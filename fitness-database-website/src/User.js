@@ -1,10 +1,17 @@
 export default class User {
     static username = '';
-    static login = e => {
-        this.username = e;
+    static password = '';
+    static update = (username, password) => {
+        this.username = username;
+        this.password = password
     }
 
-    static logout = e => {
+    static updatePassword = (password) => {
+        this.password = password;
+    }
+
+    static logout = () => {
         this.username = '';
+        this.password = '';
     }
 }

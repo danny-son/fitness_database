@@ -10,6 +10,7 @@ import DietLogs from './DietLogs';
 import WorkoutLogs from './WorkoutLogs';
 import AddWorkout from './AddWorkout';
 import EditWorkout from './EditWorkout';
+import EditAccount from './EditAccount';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path='/fitness_database/diet_logs' element={<DietLogs/>}/>
           <Route path='/fitness_database/add_workout' element={<AddWorkout/>}/>
           <Route path='/fitness_database/edit_workout' element={<EditWorkout/>}/>
+          <Route path='/fitness_database/edit_account' element={<EditAccount/>}/>
         </Routes>
       </Router>
     </div>
