@@ -3,6 +3,8 @@
 
 #### Tech stack used: ReactJS, NodeJS (Make sure you have the latest version of NodeJs installed -> https://nodejs.org/en/)
 
+#### PRE-REQUISITE: Navigate to the ```database``` directory and import the dump file titled ```fitness_proj_dump.sql```
+
 #### On the first terminal
 1.) open the terminal and call ```cd [directory_name]``` where directory_name is whatever you named the project when unzipped.
 
