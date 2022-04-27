@@ -35,7 +35,7 @@ export default function EditWorkoutLog() {
     return (
         <div className='edit-workout-main'>
         <h2>Edit your workout!</h2>
-             <div className='edit-workout'>
+        <div className='edit-workout'>
         <p>Log id: {WorkoutLog.log_id}</p>
         <p>Workout name: {WorkoutLog.workout}</p>
         <div>

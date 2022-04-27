@@ -138,7 +138,7 @@ export default function AddWorkout() {
                     <option value="difficulty">Difficulty</option>
                 </select>
                 {workoutFilter != 'all' && workoutFilter != 'difficulty' &&
-                    <div>
+                <div>
                     <label className='filter-label'>Type in a value:</label>
                     <input
                         id='search-workout'

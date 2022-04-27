@@ -11,9 +11,10 @@ import WorkoutLogs from './WorkoutLogs';
 import AddWorkout from './AddWorkout';
 import EditWorkoutLog from './EditWorkoutLog';
 import EditAccount from './EditAccount';
-import AddMeal from './AddDietLog';
+import AddMeal from './AddMeal';
 import EditMeal from './EditMeal';
 import EditDietLog from './EditDietLog';
+import AddDietLog from './AddDietLog';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path='/fitness_database/add_meal' element={<AddMeal/>}/>
           <Route path='/fitness_database/edit_meal' element={<EditMeal/>}/>
           <Route path='/fitness_database/edit_diet_log' element={<EditDietLog/>}/>
+          <Route path='/fitness_database/add_diet_log' element={<AddDietLog/>}/>
         </Routes>
       </Router>
     </div>

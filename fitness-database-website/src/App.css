@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-.all-achievements, .workouts {
+.all-achievements, .workouts, .meals {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -13,9 +13,9 @@
   margin-right: 15px;
 }
 
-.workout  {
+.workout {
    width: 1000px;
-  height: 140px;
+  height: 150px;
   background-color: antiquewhite;
   display: flex;
   flex-direction: row;
@@ -23,8 +23,39 @@
   margin: 12px;
 }
 
+.edit-meal {
+  width: 50%;
+  align-items: center;
+  background-color: antiquewhite;
+  border: 1px solid black;
+  margin: 12px;
+}
+
+.meal {
+  width: 600px;
+  height: 350px;
+  background-color: antiquewhite;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid black;
+  margin: 12px;
+}
+
+.diet-list {
+  align-items: center;
+}
+
 .edit-workout {
-  height: 400px;
+  height: 300px;
+  background-color: antiquewhite;
+  align-items: center;
+  border: 1px solid black;
+  margin: 10px;
+}
+
+.diet-index {
+  height: 200px;
   background-color: antiquewhite;
   align-items: center;
   border: 1px solid black;
@@ -57,7 +88,7 @@
 }
 
 
-.w_input {
+.w_input, .d_input {
   width: 500px;
 }
 
@@ -66,4 +97,8 @@
 }
 .filter-label {
   padding-right: 10px;
+}
+
+.subheader {
+  margin: 10px;
 }

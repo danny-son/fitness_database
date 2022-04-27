@@ -76,21 +76,6 @@ INSERT INTO workout VALUES
 (5, "Barbell reverse curl", "Bicep curl that uses a barbell where the hands are holding the bar from on-top and is done while standing and by tucking the elbows towards the side of the torso while pulling the barbell towards the shoulders", "barbell", "biceps, forearms", 3, "weight-training"),
 (6, "Deadlift", "Exercise that uses a barbell, starts with barbell on the ground and is done by squatting and pulling the bar up to the hips using the legs and core", "barbell", "abdominals, glutes, hamstrings, quads, traps", 5 , "weight-training");
 
-
-
-/*
-CREATE TABLE equipment
-(e_id INT NOT NULL PRIMARY KEY,
-name VARCHAR(24) NOT NULL,
-brand VARCHAR(24) NOT NULL,
-cost FLOAT NOT NULL,
-description VARCHAR(500) NOT NULL,
-w_id INT NOT NULL,
-FOREIGN KEY (w_id) REFERENCES workout(w_id)
-ON UPDATE CASCADE ON DELETE CASCADE);
-*/
-
-
 -- table for log
 CREATE TABLE `log`
 (log_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -138,8 +123,3 @@ FOREIGN KEY (log_id) REFERENCES `log`(log_id)
 ON UPDATE CASCADE ON DELETE CASCADE,
 FOREIGN KEY (meal_id) REFERENCES meal(meal_id)
 ON UPDATE CASCADE ON DELETE CASCADE);
-
-
-
-
-

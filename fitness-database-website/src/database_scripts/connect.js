@@ -211,10 +211,10 @@ app.post("/logWorkout", (req,res) => {
   const description = req.body.desc;
   const length = req.body.length;
   const date = new Date().toJSON().slice(0, 10);
-  let sql = `SELECT logWorkout(\"${date}\",\"${description}\",\"${username}\",\"${w_id}\",\"${length}\") AS output`;
+  let sql = `CALL logWorkout(\"${date}\",\"${description}\",\"${username}\",\"${w_id}\",\"${length}\")`;
   connection.query(sql, (err) => {
     if (err) {
-      console.log('could not create a workout log!');
+      res.status(401).send('error creating workout log!');
     } else {
       res.status(200).send('created workout log!');
     }
@@ -266,53 +266,183 @@ app.delete("/deleteWorkoutLog", (req,res) => {
 
 //CRUD for diet log
 app.post("/addDietLog", (req,res) => {
-
+  const username = req.body.username;
+  const id = req.body.id;
+  const description = req.body.description;
+  const date = new Date().toJSON().slice(0, 10);
+  let sql = `CALL logDiet(\"${date}\",\"${description}\",\"${username}\",\"${id}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      res.status(401).send('error creating workout log!');
+    } else {
+      res.status(200).send('created workout log!');
+    }
+  });
 });
 
 app.get("/viewAllDietLogs", (req,res) => {
-
+  const username = req.query.username;
+  let sql = `CALL viewDietLog(\"${username}\");`
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send(results[0]);
+    }
+  });
 });
 
 app.put("/editDietLog", (req,res) => {
-
+  const username = req.body.username;
+  const id = req.body.id;
+  const date = req.body.date;
+  const description = req.body.description;
+  let sql = `CALL updateDietLog(\"${id}\",\"${username}\",\"${description}\",\"${date}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send('success updating your diet log');
+    }
+  });
 });
 
 app.delete("/deleteDietLog", (req,res) => {
-
+  const id = req.query.id;
+  let sql = `CALL deleteWorkoutLog(\"${id}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("successfully deleted workout log!");
+    }
+  });
 });
 
 
 
 //CRUD for meals
 app.post("/addMeal", (req,res) => {
-
+  const description = req.body.description;
+  const calories = req.body.calories;
+  const carbs = req.body.carbs;
+  const protein = req.body.protein;
+  const fat = req.body.fat;
+  let sql = `CALL addMeal(\"${description}\",\"${calories}\",\"${carbs}\",\"${protein}\",\"${fat}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send('success editing a meal!');
+    }
+  });
 });
 
 app.put("/editMeal", (req,res) => {
-
+  const id = req.body.id;
+  const description = req.body.description;
+  const calories = req.body.calories;
+  const carbs = req.body.carbs;
+  const protein = req.body.protein;
+  const fat = req.body.fat;
+  let sql = `CALL editMeal(\"${id}\",\"${description}\",\"${calories}\",\"${carbs}\",\"${protein}\",\"${fat}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send('success editing a meal!');
+    }
+  });
 });
 
 app.delete("/deleteMeal", (req,res) => {
-
+  const id = req.query.id;
+  let sql = `CALL deleteMeal(\"${id}\")`;
+  connection.query(sql, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("successfully deleted workout log!");
+    }
+  });
 });
 
 app.get("/viewAllMeals", (req,res) => {
-
+  let sql = `Call findAllMeals()`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
 });
 
 app.get("/viewAllMealsByCalories", (req,res) => {
-
+  const symbol = req.query.symbol;
+  const macroValue = req.query.macroValue;
+  let sql = `Call findMealByCalories(\"${macroValue}\", \"${symbol}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
 });
 
 app.get("/viewAllMealsByProtein", (req,res) => {
-
+  const symbol = req.query.symbol;
+  const macroValue = req.query.macroValue;
+  let sql = `Call findMealByProtein(\"${macroValue}\", \"${symbol}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
 });
 
 app.get("/viewAllMealsByFat", (req,res) => {
-
+  const symbol = req.query.symbol;
+  const macroValue = req.query.macroValue;
+  let sql = `Call findMealByFat(\"${macroValue}\", \"${symbol}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
 });
 
 app.get("/viewAllMealsByCarbs", (req,res) => {
+  const symbol = req.query.symbol;
+  const macroValue = req.query.macroValue;
+  let sql = `Call findMealByCarbs(\"${macroValue}\", \"${symbol}\")`;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      console.log(err); 
+    } else {
+      let numtuples = JSON.parse(JSON.stringify(results[0].length));
+      if (numtuples > 0) {
+         res.send(results[0]);
+      }
+    }
+  });
 
 });
 

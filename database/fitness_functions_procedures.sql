@@ -152,23 +152,16 @@ END//
 
 # Logs and creates a workout log and log
 DELIMITER ;
-DROP FUNCTION IF EXISTS logWorkout;
+DROP PROCEDURE IF EXISTS logWorkout;
 DELIMITER //
-CREATE FUNCTION logWorkout(d_date DATE, d_description VARCHAR(500), username VARCHAR(64), work_id INT, len INT) RETURNS INT
-NOT DETERMINISTIC READS SQL DATA
+CREATE PROCEDURE logWorkout(d_date DATE,IN d_description VARCHAR(500), IN username VARCHAR(64), IN work_id INT,IN len INT) 
 BEGIN
-    DECLARE query_count INT;
     DECLARE l_id INT;
-    SELECT count(*) INTO query_count from workout WHERE work_id = w_id;
-    -- if there was an invalid workout_id reutrn false
-    IF (query_count = 0) THEN RETURN 0;
-    END IF;
+    
     -- else create the log and return true to indicate success
     INSERT INTO log(date,description,user_id) VALUES (d_date,d_description,username);
     SELECT log_id INTO l_id FROM `log` WHERE date = d_date AND description = d_description AND user_id = username;
     INSERT INTO workout_log VALUES (l_id,work_id,len);
-    -- possibly modify to check for len to add achievements?
-    RETURN 1;    
 END//
 
 # Gets all workout logs from a user
@@ -247,25 +240,28 @@ BEGIN
 END//
 
 
+DELIMITER ;
+DROP PROCEDURE IF EXISTS findAllMeals;
+DELIMITER //
+CREATE PROCEDURE findAllMeals()
+BEGIN 
+	SELECT * FROM meal;
+END //
 
 # Finds a meal based on specified calories, can specify operators
 DELIMITER ;
 DROP PROCEDURE IF EXISTS findMealByCalories;
 DELIMITER //
 CREATE PROCEDURE findMealByCalories(
-	IN total_calories_p INT, IN op_cal_p VARCHAR(4)
+	IN total_calories_p INT, IN op_cal_p VARCHAR(2)
 )
 BEGIN
-	IF op_cal_p IS NULL THEN
+	IF op_cal_p = '=' THEN
 		SELECT * FROM meal WHERE meal.total_calories = total_calories_p;
 	ELSEIF op_cal_p = '<' THEN
 		SELECT * FROM meal WHERE meal.total_calories < total_calories_p;
 	ELSEIF op_cal_p = '>' THEN
 		SELECT * FROM meal WHERE meal.total_calories > total_calories_p;
-	ELSEIF op_cal_p = '<=' THEN
-		SELECT * FROM meal WHERE meal.total_calories <= total_calories_p;
-	ELSEIF op_cal_p = '>=' THEN
-		SELECT * FROM meal WHERE meal.total_calories >= total_calories_p;
 	END IF;
 END //
 
@@ -277,16 +273,12 @@ CREATE PROCEDURE findMealByCarbs(
 	IN carbs_p INT, IN op_carbs_p VARCHAR(2)
 )
 BEGIN
-	IF op_carbs_p IS NULL THEN
+	IF op_carbs_p = '=' THEN
 		SELECT * FROM meal WHERE meal.carbs_g = carbs_p;
 	ELSEIF op_carbs_p = '<' THEN
 		SELECT * FROM meal WHERE meal.carbs_g < carbs_p;
 	ELSEIF op_carbs_p = '>' THEN
 		SELECT * FROM meal WHERE meal.carbs_g > carbs_p;
-	ELSEIF op_carbs_p = '<=' THEN
-		SELECT * FROM meal WHERE meal.carbs_g <= carbs_p;
-	ELSEIF op_carbs_p = '>=' THEN
-		SELECT * FROM meal WHERE meal.carbs_g >= carbs_p;
 	END IF;
 END //
 
@@ -327,16 +319,12 @@ CREATE PROCEDURE findMealByProtein(
 	IN pro_p INT, IN op_pro_p VARCHAR(2)
 )
 BEGIN
-	IF op_pro_p IS NULL THEN
+	IF op_pro_p = '=' THEN
 		SELECT * FROM meal WHERE meal.protein_g = pro_p;
 	ELSEIF op_pro_p = '<' THEN
 		SELECT * FROM meal WHERE meal.protein_g < pro_p;
 	ELSEIF op_pro_p = '>' THEN
 		SELECT * FROM meal WHERE meal.protein_g > pro_p;
-	ELSEIF op_pro_p = '<=' THEN
-		SELECT * FROM meal WHERE meal.protein_g <= pro_p;
-	ELSEIF op_pro_p = '>=' THEN
-		SELECT * FROM meal WHERE meal.protein_g >= pro_p;
 	END IF;
 END //
 
@@ -348,15 +336,57 @@ CREATE PROCEDURE findMealByFat(
 	IN fat_p INT, IN op_fat_p VARCHAR(2)
 )
 BEGIN
-	IF op_fat_p IS NULL THEN
+	IF op_fat_p = '=' THEN
 		SELECT * FROM meal WHERE meal.fat_g = fat_p;
 	ELSEIF op_fat_p = '<' THEN
 		SELECT * FROM meal WHERE meal.fat_g < fat_p;
 	ELSEIF op_fat_p = '>' THEN
 		SELECT * FROM meal WHERE meal.fat_g > fat_p;
-	ELSEIF op_fat_p = '<=' THEN
-		SELECT * FROM meal WHERE meal.fat_g <= fat_p;
-	ELSEIF op_fat_p = '>=' THEN
-		SELECT * FROM meal WHERE meal.fat_g >= fat_p;
 	END IF;
 END //
+
+# Logs and creates a workout log and log
+DELIMITER ;
+DROP PROCEDURE IF EXISTS logDiet;
+DELIMITER //
+CREATE PROCEDURE logDiet(IN d_date DATE, IN d_description VARCHAR(500), IN username VARCHAR(64), IN m_id INT)
+BEGIN
+    DECLARE l_id INT;
+    
+    -- else create the log and return true to indicate success
+    INSERT INTO `log`(date,description,user_id) VALUES (d_date,d_description,username);
+    SELECT log_id INTO l_id FROM `log` WHERE date = d_date AND description = d_description AND user_id = username;
+    INSERT INTO diet_log VALUES (l_id,m_id);
+    -- possibly modify to check for len to add achievements?
+END//
+
+
+DELIMITER ; 
+DROP PROCEDURE IF EXISTS viewDietLog;
+DELIMITER //
+CREATE PROCEDURE viewDietLog(IN username VARCHAR(64))
+BEGIN 
+	SELECT log.date, log.description, log.log_id, meal.description AS meal_description FROM log 
+    JOIN diet_log ON log.log_id = diet_log.log_id
+    JOIN meal ON meal.meal_id = diet_log.meal_id WHERE user_id = username ORDER BY log.log_id DESC;
+END //
+
+# deletes a diet log
+DELIMITER ; 
+DROP PROCEDURE IF EXISTS deleteDietLog;
+DELIMITER //
+CREATE PROCEDURE deleteDietLog(IN l_id INT)
+BEGIN
+	DELETE FROM diet_log WHERE l_id = log_id;
+    DELETE FROM log WHERE l_id = log_id;
+END //
+
+#Updates a workout log and log from a user
+DELIMITER ; 
+DROP PROCEDURE IF EXISTS updateDietLog;
+DELIMITER //
+CREATE PROCEDURE updateDietLog(IN l_id INT, IN user_p VARCHAR(64), IN d_desc VARCHAR(500), IN d_date DATE)
+BEGIN
+	UPDATE log SET date = d_date, description = d_desc WHERE user_id = user_p AND log_id = l_id;
+END //
+
